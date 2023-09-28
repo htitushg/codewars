@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"regexp"
+)
 
 func LoveFunc(flower1, flower2 int) bool {
 	if ((flower1%2 == 0) && !(flower2%2 == 0)) || ((flower2%2 == 0) && !(flower1%2 == 0)) {
@@ -60,7 +63,49 @@ func Number2(busStops [][2]int) (inBus int) {
 	}
 	return // Good Luck!
 }
+func CalculateYears(years int) (result [3]int) {
+	//age_cat := []int{15, 9, 4}
+	//age_dog := []int{15, 9, 5}
+	switch years {
+	case 1:
+		result = [3]int{1, 15, 15}
+	case 2:
+		result = [3]int{2, 24, 24}
+	default:
+		result = [3]int{years, 24 + 5*(years-2), 24 + 5*(years-2)}
+	}
+	return result
+}
+func contains(s rune) bool {
+	voyelles := []rune{'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}
+	for _, a := range voyelles {
+		if a == s {
+			return true
+		}
+	}
+	return false
+}
+func Disemvowel(comment string) string {
+
+	resultat := ""
+	for i := 0; i < len(comment); i++ {
+
+		if !contains(rune(comment[i])) {
+			resultat += string(comment[i])
+		}
+	}
+	return resultat
+}
+func Disemvowel2(comment string) string {
+	return regexp.MustCompile(`(?i)[aeiou]`).ReplaceAllString(comment, "")
+}
 func main() {
+	fmt.Printf("%v\n", Disemvowel("This website is for losers LOL!"))
+	fmt.Printf("%v\n", Disemvowel("XYz?"))
+	fmt.Printf("%v\n", Disemvowel("wgtwrJjKznbGLKRFRscnbST XQDzdfnjkSsBphtHFYtRLPvVBLFVm"))
+	//fmt.Printf("%v\n", (CalculateYears(1)))
+	//fmt.Printf("%v\n", (CalculateYears(2)))
+	//fmt.Printf("%v\n", (CalculateYears(10)))
 	//fmt.Printf("LoveFunc = %t\n", LoveFunc(1, 4))
 	//fmt.Printf("LoveFunc = %t\n", LoveFunc(2, 2))
 	//fmt.Printf("LoveFunc = %t\n", LoveFunc(0, 1))
@@ -78,5 +123,6 @@ func main() {
 	//fmt.Printf("%s\n", string(GetGrade2(92, 93, 94)))
 	//fmt.Printf("%s\n", string(GetGrade2(70, 70, 100)))
 	//fmt.Printf("%s\n", string(GetGrade2(82, 85, 87)))
-	fmt.Printf("Nombre = %v\n", Number2([][2]int{{10, 0}, {3, 5}, {5, 8}}))
+	//fmt.Printf("Nombre = %v\n", Number2([][2]int{{10, 0}, {3, 5}, {5, 8}}))
+
 }
