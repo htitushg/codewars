@@ -1,0 +1,47 @@
+{
+    "window.zoomLevel": 2,
+    "editor.minimap.enabled": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.renderWhitespace": "trailing",
+    "editor.linkedEditing": true,
+    "editor.occurrencesHighlight": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "files.autoSave": "onFocusChange",
+    "files.defaultLanguage": "go",
+    "files.exclude": {
+        //"**/.git": true,
+        //"**/.svn": true,
+        //"**/.hg": true,
+        //"**/CVS": true,
+        //"**/.DS_Store": true,
+        //"**/Thumbs.db": true
+    },
+    "explorer.autoReveal": false,
+    "explorer.confirmDragAndDrop": true,
+    "explorer.confirmDelete": true,
+    "explorer.confirmUndo": "default",
+    "workbench.tree.indent": 15,
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.editor.enablePreview": false,
+    "emmet.triggerExpansionOnTab": true,
+    "git.confirmSync": true,
+    "git.enableSmartCommit": true,
+    "workbench.colorTheme": "Tokyo Night",
+    "editor.fontLigatures": true,
+    "editor.fontFamily": "'JetBrains Mono',Consolas, 'Courier New',monospace", //'Droid Sans Mono', 'monospace', monospace",
+    //"files.associations": {
+    //    "*.tmpl": "html"
+    //}
+    "editor.lineHeight": 20,
+    "editor.fontSize": 13,
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.hidesExplorerArrows": true,
+    "workbench.colorCustomizations": {
+        "[Tokyo Night]": {
+            "editor.selectionBackground": "#0e2255",
+            "editor.selectionHighlightBackground": "#0e2255",
+        }
+    },
+}
