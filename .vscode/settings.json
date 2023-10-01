@@ -44,4 +44,19 @@
             "editor.selectionHighlightBackground": "#0e2255",
         }
     },
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "athena",
+            "database": "recordings",
+            "username": "henry"
+        }
+    ],
 }
