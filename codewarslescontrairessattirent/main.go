@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 	"slices"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -523,13 +525,308 @@ func MinMax(arr ...int) []int {
 	sort.Ints(arr)
 	return append(arr[:1], arr[len(arr)-2:]...)
 }
+func FindNextSquare2(sq int64) int64 {
+	o := math.Sqrt(float64(sq))
+	if int64(math.Pow(o, 2)) != int64(math.Pow(math.Floor(o), 2)) {
+		// sq n'est pas un carré
+		return -1
+	} else {
+		// sq est un carré
+		return int64(math.Pow(o+1, 2))
+	}
+}
 func FindNextSquare(sq int64) int64 {
+	res := math.Pow(math.Sqrt(float64(sq))+1, 2)
+
+	if res == math.Trunc(res) { // Trunc renvoie la partie entière de res
+		return int64(res)
+	}
 	return -1
 }
 
+type Fighter struct {
+	Name            string
+	Health          int
+	DamagePerAttack int
+}
+
+func DeclareWinner(fighter1 Fighter, fighter2 Fighter, firstAttacker string) string {
+	var attacker1, attacker2 *Fighter
+	if firstAttacker == fighter1.Name {
+		attacker1 = &fighter1
+		attacker2 = &fighter2
+	} else {
+		attacker2 = &fighter1
+		attacker1 = &fighter2
+	}
+	var attaquant, victime *Fighter
+	round := 1
+	for {
+		if round%2 != 0 {
+			attaquant = attacker1
+			victime = attacker2
+		} else {
+			attaquant = attacker2
+			victime = attacker1
+		}
+		victime.Health -= attaquant.DamagePerAttack
+		fmt.Printf("\n%v has now %d health", victime.Name, victime.Health)
+		if victime.Health <= 0 {
+			fmt.Printf(" and is dead. %v wins\n", attaquant.Name)
+			return attaquant.Name
+		}
+		round++
+	}
+}
+
+// Count the divisors of a number
+func Divisors(n int) int {
+	var y []int
+	for i := 1; i <= n/2; i++ {
+		if n%i == 0 {
+			y = append(y, i)
+			//fmt.Printf("we have %d ", i, n)
+		}
+	}
+	//fmt.Printf("%d --> %d // we have %d divisors ", n, len(y)+1, len(y)+1)
+	//for i := 0; i < len(y); i++ {
+	//fmt.Printf("%d, ", y[i])
+	//}
+	//fmt.Printf(" and ")
+	return len(y) + 1
+}
+
+// What numbers are between a et b, including them ?
+func Between(a, b int) []int {
+	var resultat []int
+	if a > b {
+		a, b = b, a
+	}
+	for y := a; y <= b; y++ {
+		resultat = append(resultat, y)
+	}
+	return resultat
+}
+func RecursiveFactorial(n int) int {
+	if n == 0 {
+		return 1
+	} else {
+
+		return n * RecursiveFactorial(n-1)
+
+	}
+}
+func HowMuchILoveYou(i int) string {
+	reponse := []string{"I love you", "a little", "a lot", "passionately", "madly", "not at all"}
+
+	i = (i - 1) % len(reponse)
+	return reponse[i]
+}
+func toChar(i int) rune {
+	return rune('0' - 1 + i)
+}
+
+func toCharStr(i int) string {
+	return string('0' - 1 + i)
+}
+
+func Order(sentence string) string {
+	if sentence == "" {
+		return ""
+	}
+	var index []int //Mémorisation de la positio de chaque mot
+	var phrase []string
+	phrase = strings.Split(sentence, " ")
+	var resultat []string
+	for i := 0; i < len(phrase); i++ {
+		resultat = append(resultat, "")
+	}
+
+	x := 0 // Split sentence into words in Phrase
+	for i := 0; i < len(phrase); i++ {
+		//fmt.Printf("%v\n", phrase[i])
+		x = strings.IndexAny(phrase[i], "123456789")
+		index = append(index, int(phrase[i][x]))
+		//fmt.Printf("Longueur de index=%d, Index = %v\n", len(index), index)
+		sentence = ""
+	}
+	//fmt.Printf("Fin de la première boucle for")
+	//time.Sleep(5 * time.Second)
+	for i := 0; i < len(index); i++ {
+		//fmt.Printf("Index[%d]=%d, phrase[%d]=%v\n", i, index[i], i, phrase[i])
+		//time.Sleep(3 * time.Second)
+		resultat[index[i]-49] = phrase[i]
+	}
+	for i := 0; i < len(resultat)-1; i++ {
+		sentence = sentence + resultat[i] + " "
+	}
+	sentence = sentence + resultat[len(resultat)-1]
+	return sentence
+}
+func Order2(sentence string) string {
+	if strings.TrimSpace(sentence) == "" {
+		return sentence
+	}
+
+	re := regexp.MustCompile("[1-9]")
+	pieces := strings.Split(sentence, " ")
+	sort.SliceStable(pieces, func(i, j int) bool {
+		num_i := re.FindString(pieces[i])
+		num_j := re.FindString(pieces[j])
+		return num_i < num_j
+	})
+	return strings.Join(pieces, " ")
+}
+func Order3(s string) string {
+	a := strings.Split(s, " ")
+	r := make([]string, len(a))
+	for _, st := range a {
+		for _, c := range st {
+			if c >= '0' && c <= '9' {
+				r[int(c-'1')] = st
+				break
+			}
+		}
+	}
+	return strings.Join(r, " ")
+}
+func SumDigPow(a, b uint64) []uint64 {
+	var resultat []uint64
+	for i := a; i <= b; i++ {
+		resultat = append(resultat, i)
+	}
+	//fmt.Printf("resultat=%v\n", resultat)
+
+	for i := 0; i < len(resultat); i++ {
+		if resultat[i] < 10 {
+			continue
+		} else {
+			//il faut décomposer chaque chiffre du nombre dans chiffres[]
+			//fmt.Printf("O traite le nombre resultat[%v]=%v \n", i, resultat[i])
+			var chiffres []uint64
+			chiffreencours := resultat[i]
+			chiffreencours = chiffreencours * 10
+			for {
+				chiffreencours = chiffreencours / 10
+				if chiffreencours < 10 {
+					chiffres = append(chiffres, chiffreencours)
+					break
+				} else {
+					chiffres = append(chiffres, chiffreencours%10)
+				}
+			}
+			// calcul de chiffre1 puissance 1 +chiffre2 puissance 2...
+			var calcul uint64
+			calcul = 0
+			//fmt.Printf("Après remplissage chiffres: chiffres=%v, len(chiffres)=%v\n", chiffres, len(chiffres))
+			for j := 0; j < len(chiffres); j++ {
+				calcul = calcul + uint64(math.Pow(float64(chiffres[j]), float64((len(chiffres)-j))))
+				//fmt.Printf("Dans Boucle j: len(chiffres)= %v, Chiffres[%v]=%v, puissance = %v\n", len(chiffres), j, chiffres[j], float64((len(chiffres) - j)))
+				//fmt.Printf("Boucle j:calcul=%v, resultat[%v]= %v \n", calcul, i, resultat[i])
+			}
+			//fmt.Printf("Après Boucle j:calcul=%v, resultat[%v]= %v \n", calcul, i, resultat[i])
+			//time.Sleep(3 * time.Second)
+			if calcul != resultat[i] {
+				resultat = append(resultat[:i], resultat[i+1:]...)
+				i--
+			}
+		}
+	}
+	return resultat
+}
+func SumDigPow2(a, b uint64) []uint64 {
+	r := []uint64{}
+	for i := a; i <= b; i++ {
+		s := 0
+		p := strconv.Itoa(int(i))
+		for l, n := range p {
+			z, _ := strconv.Atoi(string(n))
+			s += int(math.Pow(float64(z), float64((l + 1))))
+		}
+		if uint64(s) == uint64(i) {
+			r = append(r, uint64(s))
+		}
+		s = 0
+	}
+	return r
+}
+func Fibonacci(nb int) int {
+	if nb < 0 {
+		return -1
+	} else if nb == 0 {
+		return 0
+	} else if nb == 1 {
+		return 1
+	}
+	return Fibonacci(nb-1) + Fibonacci(nb-2)
+
+}
+
+// suite de Tribonacci (variante de Fibonacci) on ajoute les trois nombres précédents pour produire le 4ème
+
+func TriB(a, b, c float64) float64 {
+	return a + b + c
+}
+func Tribonacci(signature [3]float64, n int) []float64 {
+	var resultat = []float64{}
+	if len(signature) < 3 {
+		return resultat
+	} else {
+		if n == 0 {
+			return resultat
+		} else if n == 1 {
+			resultat = append(resultat, signature[0])
+			return resultat
+		} else if n == 2 {
+			resultat = append(resultat, signature[0])
+			resultat = append(resultat, signature[1])
+			return resultat
+		} else {
+			resultat = append(resultat, signature[0])
+			resultat = append(resultat, signature[1])
+			resultat = append(resultat, signature[2])
+			for i := 0; i <= n-4; i++ {
+				resultat = append(resultat, TriB(float64(resultat[0+i]), float64(resultat[1+i]), float64(resultat[2+i])))
+			}
+			return resultat
+		}
+
+	}
+}
+func Tribonacci2(signature [3]float64, n int) (r []float64) {
+	r = signature[:]
+	for i := 0; i < n; i++ {
+		l := len(r)
+		r = append(r, r[l-1]+r[l-2]+r[l-3])
+	}
+	return r[:n]
+}
 func main() {
-	fmt.Printf("%v\n", MinMax(1, 2, 3, 4, 5))
-	fmt.Printf("%v\n", MinMax(2334454, 5))
+
+	fmt.Println(Tribonacci2([3]float64{4, 2, 9}, 2))
+	//fmt.Printf("%v\n", SumDigPow(1, 200))
+	//fmt.Printf("%v\n", Order("is2 Thi1s T4est 3a"))
+	//fmt.Printf("%v\n", Order("4of Fo1r pe6ople g3ood th5e the2"))
+	//fmt.Printf("%v\n", Order(""))
+	//fmt.Printf("%v\n", HowMuchILoveYou(6))
+	//fmt.Printf("%v\n", Between(1, 4))
+	//fmt.Printf("%v\n", Between(-2, 2))
+	//fmt.Printf("%v\n", Divisors(1))
+	//fmt.Printf("%v\n", Divisors(10))
+	//fmt.Printf("%v\n", Divisors(11))
+	//fmt.Printf("%v\n", Divisors(54))
+	//fmt.Printf("%v\n", Divisors(64))
+
+	//DeclareWinner(Fighter{"Lew", 10, 2}, Fighter{"Harry", 5, 4}, "Lew")
+
+	//fmt.Printf("%v\n", FindNextSquare(121))
+	//fmt.Printf("%v\n", FindNextSquare(625))
+	//fmt.Printf("%v\n", FindNextSquare(114))
+	//fmt.Printf("%v\n", FindNextSquare(15241383936))
+	//fmt.Printf("%v\n", FindNextSquare(155))
+
+	//fmt.Printf("%v\n", MinMax(1, 2, 3, 4, 5))
+	//fmt.Printf("%v\n", MinMax(2334454, 5))
 	//fmt.Printf("%v\n", Gimme([3]int{2, 3, 1}))
 	//fmt.Printf("%v\n", Gimme([3]int{5, 10, 14}))
 	//fmt.Printf("%v\n", Gimme([3]int{1, 3, 4}))
